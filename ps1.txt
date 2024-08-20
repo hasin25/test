@@ -1,0 +1,140 @@
+PROBLEM SHEET 1
+//1
+def count_lines():
+    count=0
+    f=open("file.txt","r")
+    for i in f:
+        count+=1
+    return count
+   
+nos=[]
+data=[]
+f=open("file.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline())
+    num=float(data[i])
+    nos.append(num)    
+print(nos)
+f.close()
+sum=0
+for i in range(n):
+    sum+=nos[i]
+mean=sum/n
+print("Mean: ",mean)
+if (n%2==1):
+    median=nos[((n+1)/2)]
+else:
+    p1=((n/2))
+    p2=((n/2)+1)
+    median=nos[int((p1+p2)/2)]
+print("Median: ",median)
+i=0
+j=i+1
+repetition=[]
+for i in range(n):
+    for j in range(n):
+        if nos[i]==nos[j]:
+            repetition.append(nos[j])
+           
+print(repetition)  
+
+//2
+import math
+def count_lines():
+    count=0
+    f=open("file.txt","r")
+    for i in f:
+        count+=1
+    return count
+    
+nos=[]
+data=[]
+f=open("file.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline())
+    num=float(data[i])
+    nos.append(num)    
+print(nos)
+f.close()
+sum=0
+for i in range(n):
+    sum+=nos[i]
+mean=sum/n
+arr=[]
+result=0
+for i in range(n):
+    part1=nos[i]-mean
+    part2=part1*part1
+    arr.append(part2)
+    result+=arr[i]
+
+std=math.sqrt(((1/n)*(result)))
+print("Standard Deviation: ",std)
+//3
+
+def count_lines():
+    count=0
+    f=open("file2.txt","r")
+    for i in f:
+        count+=1;
+    return count
+
+n=count_lines()  
+nos=[]
+data=[]
+arr=[]
+first=[]
+last=[]
+midpoint=[]
+product=0
+sum=0
+m_index=0
+G=0
+temp1=0
+B=0
+L1=0
+L2=0
+f=open("file2.txt","r")
+for i in range(n):
+    temp=f.readline().split()
+    data.append([temp[0],int(temp[1])])
+    temp=data[i][0]
+    data[i][0]=[int(i) for i in temp.split('-')]
+f.close()
+for i in range(n):
+    first.append(data[i][0][0])
+    last.append(data[i][0][1])
+for i in range(n):
+    midpoint.append(int((first[i]+last[i])/2))
+print(midpoint)
+for i in range(n):
+    product+=midpoint[i]*data[i][1]
+    sum+=data[i][1]
+mean=product/sum
+print("Mean: ",mean)
+m=int(sum/2)+1
+for i in range(n):
+    temp1+=data[i][1]
+    if temp1>m:
+        G=data[i][1]
+        m_index=i
+        break
+L1=first[m_index]
+for i in range(m_index):
+    B+=data[i][1]
+w=last[0]-first[0]+1
+median=L1+((((sum/2)-B)/G)*w)
+print("Median: ",median)
+max=0
+for i in range(n):
+    if data[i][1]>max:
+        max=data[i][1]
+        index=i
+f=max
+L2=first[index]
+fm_1=data[index-1][1]
+fm_2=data[index+1][1]
+mode=L2+((f-fm_1)/((f-fm_1)+(f-fm_2)))*w
+print("Mode: ",mode)
