@@ -1,0 +1,202 @@
+					Problem Sheet -3
+//1
+import math
+import matplotlib.pyplot as plt
+def count_lines():
+    count=0
+    f=open("reg_linear.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+data=[]
+x=[]
+r=[]
+f=open("reg_linear.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline().split())
+    num=int(data[i][0])
+    x.append(num)  
+    num=int(data[i][1])
+    r.append(num)
+    
+print(x)
+print(r)
+X=0
+R=0
+XR=0
+XT=0
+for i in range(n):
+    R+=r[i]
+    X+=x[i]
+    XR+=x[i]*r[i]
+    XT+=math.pow(x[i],2)
+X=X/n
+R=R/n
+w1=(XR-X*R*n)/(XT-math.pow(X,2)*n)
+w0=R-w1*X
+print("The Value of w0 : ",round(w0,1))
+print("The Value of w1 : ",round(w1,1))
+g=[]
+for i in range(n):
+    val=w1*x[i]+w0
+    g.append(round(val,1))
+print(g)
+plt.plot(x,g)
+plt.show()
+
+//2
+import math
+def count_lines():
+    count=0
+    f=open("reg_multiple.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+data=[]
+x1=[]
+x2=[]
+r=[]
+f=open("reg_multiple.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline().split())
+    num=int(data[i][0])
+    x1.append(num)  
+    num=int(data[i][1])
+    x2.append(num)
+    num=int(data[i][2])
+    r.append(num)    
+X1=0
+X2=0
+R=0
+X1T=0
+X2T=0
+X1_X2=0
+RX1=0
+RX2=0
+arr=[]
+for i in range(n):
+    X1+=x1[i]
+    X2+=x2[i]
+    R+=r[i]
+    X1T+=math.pow(x1[i],2)
+    X2T+=math.pow(x2[i],2)
+    X1_X2+=x1[i]*x2[i]
+    RX1+=r[i]*x1[i]
+    RX2+=r[i]*x2[i]
+matrix=[[n,X1,X2],[X1,X1T,X1_X2],[X2,X1_X2,X2T]]
+r=[R,RX1,RX2]
+w0=w1=w2=0
+w0=(r[0]-matrix[0][1]*w1-matrix[0][2]*w2)/matrix[0][0]
+w1=(r[1]-matrix[1][0]*w0-matrix[1][2]*w2)/matrix[1][1]
+w2=(r[2]-matrix[2][0]*w0-matrix[2][1]*w1)/matrix[2][2]
+print("The value of w0: ",round(w0,3))
+print("The value of w1: ",round(w1,3))
+print("The value of w2: ",round(w2,3))
+
+//3
+import math
+import matplotlib.pyplot as plt
+def count_lines():
+    count=0
+    f=open("poly_reg_single.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+data=[]
+x=[]
+r=[]
+f=open("poly_reg_single.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline().split())
+    num=int(data[i][0])
+    x.append(num)  
+    num=int(data[i][1])
+    r.append(num)
+X1=X2=X3=X4=R=XR=X2R=0
+xt2=[]
+for i in range(n):
+    X1+=x[i]
+    X2+=math.pow(x[i],2)
+    X3+=math.pow(x[i],3)
+    X4+=math.pow(x[i],4)
+    R+=r[i]
+    XR+=(x[i]*r[i])
+    X2R+=(math.pow(x[i],2)*r[i])
+    xt2.append(math.pow(x[i],2))
+matrix=[[n,X1,X2],[X1,X2,X3],[X2,X3,X4]]
+r=[R,XR,X2R]
+
+w0=w1=w2=0
+w0=(r[0]-matrix[0][1]*w1-matrix[0][2]*w2)/matrix[0][0]
+w1=(r[1]-matrix[1][0]*w0-matrix[1][2]*w2)/matrix[1][1]
+w2=(r[2]-matrix[2][0]*w0-matrix[2][1]*w1)/matrix[2][2]
+print("The value of w0: ",round(w0,3))
+print("The value of w1: ",round(w1,3))
+print("The value of w2: ",round(w2,3))
+g=[]
+for i in range(n):
+    g.append((w0+w1*x[i]+w2*xt2[i]))
+plt.plot(x,g)
+plt.plot(xt2,g)
+plt.show()
+
+//4
+import math
+import matplotlib.pyplot as plt
+
+def count_lines():
+    count = 0
+    with open("logistics_reg.txt", "r") as f:
+        for i in f:
+            count += 1
+    return count
+
+data = []
+x1 = []
+x2 = []
+label = []
+
+no = int(input("Enter the number of epochs: "))
+alpha = float(input("Enter the alpha value: "))
+
+with open("logistics_reg.txt", "r") as f:
+    n = count_lines()
+    for i in range(n):
+        line = f.readline().split()
+        num1 = float(line[0])
+        num2 = float(line[1])
+        num_label = int(line[2])
+        x1.append(num1)
+        x2.append(num2)
+        label.append(num_label)
+
+w0 = w1 = w2 = 0
+
+for i in range(no):
+    pred = []
+    for j in range(len(x1)):
+        z = w0 + w1 * x1[j] + w2 * x2[j]
+        prediction = 1 / (1 + math.exp(-z))
+        var=round(prediction,4)
+        print(var)
+        if var>=0.5:
+            pred.append(1)
+        else:
+            pred.append(0)
+        w0 += round(alpha * (label[j] - prediction) * prediction * (1 - prediction),4)
+        w1 += round(alpha * (label[j] - prediction) * prediction * (1 - prediction) * x1[j],4)
+        w2 += round(alpha * (label[j] - prediction) * prediction * (1 - prediction) * x2[j],4)
+    print(pred)
+    correct_predictions = sum([1 for i in range(len(label)) if label[i] == pred[i]])
+    accuracy = (correct_predictions / len(label)) * 100
+    print(f"At the end of epoch {i + 1}:")
+    print(f"The value of w0: {w0:.4f}")
+    print(f"The value of w1: {w1:.4f}")
+    print(f"The value of w2: {w2:.4f}")
+    print(f"Accuracy: {accuracy:.4f}%")
