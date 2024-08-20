@@ -1,0 +1,255 @@
+PROBLEM SHEET -2
+
+//1
+import math
+x=float(input("Enter the starting point: "))
+y=float(input("Enter the ending point: "))
+pt=float(input("Enter the point to be checked:"))
+lambda_var=0
+while True:
+    lambda_var+=0.001
+    val=lambda_var*x+(1-lambda_var)*y
+    val=round(val,2)
+    print(val)
+    print(lambda_var)
+    if val==pt and lambda_var<=1 :
+        print("It lies on the line")
+        break
+    else:
+        print("It does not lie on the line")
+   
+   
+//2
+import math
+def count_lines():
+    count=0
+    f=open("file.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+data=[]
+x=[]
+y=[]
+m=1
+c=0
+LR=0.001
+f=open("file.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline().split())
+    num=int(data[i][0])
+    x.append(num)  
+    num=int(data[i][1])
+    y.append(num)
+
+for i in range(10):
+    del_m=0
+    del_c=0
+    for j in range (n):
+        if(x[j]>=0):
+            del_m+=2*((y[j]-x[j]*m-c)*(-x[j]))
+            del_c+=2*((y[j]-x[j]*m-c)*(-1))
+        else:
+            del_m+=2*((y[j]-x[j]*m-c)*(x[j]))
+            del_c+=2*((y[j]-x[j]*m-c)*(-1))
+    m=m-(del_m*LR)  
+    c=c-(del_c*LR)
+    print("Iteration:",i+1)
+    print("m: ",round(m,4))
+    print("c: ",round(c,4))
+//3.1
+import math
+def count_lines():
+    count=0
+    f=open("file2.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+data=[]
+actual=[]
+predicted=[]
+f=open("file2.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline().split())
+    num=float(data[i][0])
+    actual.append(num)  
+    num=float(data[i][1])
+    predicted.append(num)
+   
+sum1=0
+sum2=0
+sum3=0
+for i in range(n):  
+    sum1+=(actual[i]-predicted[i])**2
+    sum2+=abs(actual[i]-predicted[i])
+    sum3+=actual[i]-predicted[i]
+print("MSE: ",round((sum1/n),3))
+print("MAE: ",round((sum2/n),3))
+print("MBE: ",round((sum3/n),3))
+
+//3.2.1
+import math
+def count_lines():
+    count=0
+    f=open("cross_bin.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+data=[]
+actual=[]
+predicted=[]
+f=open("cross_bin.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline().split())
+    num=int(data[i][1])
+    actual.append(num)  
+    num=float(data[i][2])
+    predicted.append(num)
+res=0
+for i in range(n):
+    res=(actual[i]*math.log(predicted[i],2)+(1-actual[i])*math.log(1-predicted[i],2))
+    res+=round(res,4)    
+ce=-1/n*(res) 
+print("Cross Entropy Loss: ",round(ce,4))
+
+//3.2.2
+
+import math
+def count_lines():
+    count=0
+    f=open("cross_multi.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+n=count_lines()
+data = []
+s = []
+
+with open("cross_multi.txt", "r") as file:
+    for line in file:
+        line = line.strip()
+        if ';' in line:
+            before, after = line.split(';')
+            data_row = [int(num) for num in before.split()]
+            s_row = [float(num) for num in after.split()]
+            data.append(data_row)
+            s.append(s_row)
+sum=[]
+softmax=[[0]*n for i in range(n)]
+for i in range(n):
+    num=0
+    for j in range(n):
+        num+=round((math.exp(s[i][j])),3)
+    sum.append(round(num,3))
+num=0
+for i in range(n):
+    for j in range(n):
+        softmax[i][j]=round((math.exp(s[i][j])/sum[i]),3)
+#print(softmax)
+CE=[[0]*n for i in range(n)]
+val=0
+row=[]
+for i in range(n):
+    for j in range(n):
+        CE[i][j]=data[i][j]*round(math.log10(softmax[i][j]),3)
+#print(CE)
+Error=[]
+for i in range(n):
+    row_data=0
+    for j in range(n):
+        row_data+=(-(CE[i][j]))
+        print(row_data)
+    Error.append(row_data)
+print(Error)
+
+//3.2.3
+import math
+def count_lines():
+    count=0
+    f=open("hinge_bin.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+data=[]
+actual=[]
+predicted=[]
+f=open("hinge_bin.txt","r")
+n=count_lines()
+for i in range(n):
+    data.append(f.readline().split())
+    num=int(data[i][0])
+    actual.append(num)  
+    num=float(data[i][1])
+    predicted.append(num)
+print("Loss: ")
+for i in range(n):
+    loss=max(0,1-(actual[i]*predicted[i]))
+    print(round(loss,3))
+
+//3.2.4
+import math
+def count_lines():
+    count=0
+    f=open("cross_bin.txt","r")
+    for i in f:
+        count+=1
+    return count
+
+no=count_lines()
+
+def max(m,n):
+    if m>n:
+        return(m)
+    else:
+        return(n)
+
+fp=open("hinge_multiple.txt","r")
+count=0
+Act=[]
+Img=[]
+Values=[]
+count=0
+
+for i in range(no):
+    x=fp.readline().strip()
+    if count==0:
+        Img.append(x.split())
+    else:
+        b,a=x.split(',')
+        Values.append(b.split())
+        Act.append(a)
+    count+=1
+count-=1   
+print(Values)
+Loss=0
+for i in range(0,count):
+    n=Act[i]
+    n=int(n)
+    n=n-1
+    #print("n",n)
+    syi=float(Values[i][n])
+    print("syi",syi) 
+    Loss=0
+    for j in range(0,count):
+        if j!=n:
+          #print("j",n)
+          value=float(Values[n-1][j])-syi+1
+          
+          Loss=max(0,value) +Loss   
+    print(f"Loss of image{i+1} = {round(Loss,3)}")
+    
+
+
+        
+        
+    
+
+
+
